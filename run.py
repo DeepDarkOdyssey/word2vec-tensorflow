@@ -87,7 +87,7 @@ def run():
             data_size = len(f.readline().split())
 
         global_config = {
-            'data_size': data_size,
+            'data_size': data_size * config.num_skips,
             'vocab_size': vocab.size
         }
         with open(config.global_config, 'w') as f:
