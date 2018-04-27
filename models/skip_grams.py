@@ -54,14 +54,14 @@ class SkipGrams:
     def train_epoch(self, sess, epoch, writer, summary_freq):
         sess.run(self.initializer)
         step = 0
-        t = tqdm.trange(self.config.data_size, desc='Epoch {}'.format(epoch))
+        t = tqdm.trange(self.config.data_size // self.config.batch_size + 1, desc='Epoch {}'.format(epoch))
         while True:
             try:
                 _, loss, summaries, global_step = sess.run([self.train_op, self.loss, self.summary_op, self.global_step])
                 step += 1
 
             except tf.errors.OutOfRangeError:
-                t.update(self.config.train_size % summary_freq)
+                t.update(self.config.data_size % summary_freq)
                 t.close()
                 break
 
