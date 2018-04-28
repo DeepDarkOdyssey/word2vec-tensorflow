@@ -86,29 +86,3 @@ def gen_batchv2(data, num_skips, skip_window):
         else:
             buffer.append(data[data_index])
             data_index += 1
-
-
-if __name__ == '__main__':
-    from vocab import Vocab
-    vocab = Vocab(['data/toy_data.txt'], sep=' ')
-    print(vocab.size)
-
-    config = {
-        'num_parallel_calls': 8,
-        'batch_size': 8,
-        'num_skips': 2,
-        'skip_window': 1
-    }
-    config = collections.namedtuple('Config', config.keys())(**config)
-    print(config)
-    inputs = build_skip_grams_inputs('data/toy_data.txt', config, vocab)
-    with tf.Session() as sess:
-        sess.run(tf.tables_initializer())
-        sess.run(inputs.initializer)
-        contexts, targets = sess.run([inputs.contexts, inputs.targets])
-        print(contexts, targets)
-        for c, t in zip(contexts, targets):
-            print(vocab.id2token[c], vocab.id2token[t])
-        # for indices in batch_indices:
-        #     print([vocab.id2token[i] for i in indices])
-
